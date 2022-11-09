@@ -38,17 +38,17 @@ const submit = document.querySelector('.submit');
 const play = document.querySelector('.play');
 
 let qIndex = 0;
-let currentCount = 0;
+let correctCount = 0;
 let wrongCount = 0;
 let total = 0;
 let selectedAnswer;
 
 const playAgain = () => {
   qIndex = 0;
-  currentCount = 0;
+  correctCount = 0;
   wrongCount = 0;
   total = 0;
-  showQuestion(qindex);
+  showQuestion(qIndex);
 };
 
 play.addEventListener('click', () => {
@@ -63,12 +63,14 @@ const showResult = () => {
 
   resultScreen.querySelector(
     '.correct'
-  ).textContent = `Correct Answers: ${currentCount}`;
+  ).textContent = `Correct Answers: ${correctCount}`;
+
   resultScreen.querySelector(
     '.wrong'
   ).textContent = `Wrong Answers: ${wrongCount}`;
-  resultScreen.querySelector('.score').textContent = ` Score: ${
-    (currentCount - wrongCount) * 10
+
+  resultScreen.querySelector('.score').textContent = `Score: ${
+    (correctCount - wrongCount) * 10
   }`;
 };
 
@@ -79,10 +81,12 @@ const showQuestion = (qNumber) => {
   answersContainer.innerHTML = data[qNumber].answers
     .map(
       (item, index) =>
-        `<div class="answer">
-    <input type="radio" id=${index} name="answer" value=${item.isCorrect} />
-    <label for=${index}>${item.answer}</label>
-</div>`
+        `
+  <div class="answer">
+      <input type="radio" id=${index} name="answer" value=${item.isCorrect} />
+      <label for="1">${item.answer}</label>
+  </div>
+  `
     )
     .join('');
 
@@ -90,8 +94,8 @@ const showQuestion = (qNumber) => {
 };
 
 const selectAnswer = () => {
-  answersContainer.querySelectorAll('input').forEach((item) => {
-    item.addEventListener('click', (e) => {
+  answersContainer.querySelectorAll('input').forEach((el) => {
+    el.addEventListener('click', (e) => {
       selectedAnswer = e.target.value;
     });
   });
@@ -100,17 +104,10 @@ const selectAnswer = () => {
 const submitAnswer = () => {
   submit.addEventListener('click', () => {
     if (selectedAnswer !== null) {
-      if (selectedAnswer === 'true') {
-        currentCount++;
-      } else {
-        wrongCount++;
-      }
-      total++;
+      selectedAnswer === 'true' ? correctCount++ : wrongCount++;
       qIndex++;
       showQuestion(qIndex);
-    } else {
-      alert('Please select an answer');
-    }
+    } else alert('Select an answer!');
   });
 };
 
